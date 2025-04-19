@@ -53,19 +53,18 @@ When saving is enabled, output for each server will be stored in a uniquely name
 Sometimes you just want to run a few commands on a bunch of servers. But sometimes… compliance says nope.
 
 I found myself in an environment where:
-    Ansible? Nope. Not allowed to use it — not on my machine, and definitely not on the servers.
-    Multiple servers? Oh yeah, and they all needed the same commands to run.
-    Output? Needed saving and organizing without getting mixed up.
-    Some servers needed sudo, some didn't even have it. Go figure.
+- Ansible? Nope. Not allowed to use it — not on my machine, and definitely not on the servers.
+- Multiple servers? Oh yeah, and they all needed the same commands to run.
+- Output? Needed saving and organizing without getting mixed up.
+- Some servers needed sudo, some didn't even have it. Go figure.
 
 At first, it seemed harmless — just a few manual SSH sessions. But before I knew it, I was wasting hours copy-pasting commands, consolidating output, and praying I didn’t overwrite anything.
 
-So I wrote this:
-    A Bash script that:
-        SSHs into multiple servers
-        Runs multiple commands
-        Optionally uses sudo (because some days you just need that power)
-        Optionally saves outputs with neat filenames (no more accidental overwrites, woohoo!)
+So I wrote this bash script that:
+- SSHs into multiple servers
+- Runs multiple commands
+- Optionally uses sudo (because some days you just need that power)
+- Optionally saves outputs with neat filenames (no more accidental overwrites, woohoo!)
 
 No fancy YAML, no agents to manage, just plain old Bash doing what it does best: brute-forcing sanity.
 
