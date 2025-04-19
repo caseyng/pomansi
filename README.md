@@ -3,7 +3,6 @@
 `pomansi.sh` is a lightweight Bash utility for running one or more commands across multiple servers over SSH, with optional `sudo`, output saving, and custom SSH options. It’s ideal for quick diagnostics or bulk administrative tasks—no Ansible or Python required.
 
 ## 🚀 Features
-
 - Execute multiple commands on multiple servers
 - Optional `sudo` support with password prompt
 - Save outputs to directory
@@ -11,7 +10,6 @@
 - Minimal dependencies (just Bash and SSH)
 
 ## 🛠️ Usage
-
 ```bash
 ./pomansi.sh [options]
 Required
@@ -35,22 +33,23 @@ Example
       --sudo yes \
       --save yes \
       -v
+```
 
-📝 Requirements
-    All remote servers must have the same credentials (same username and authentication method) — because trying to manage different users for each server is a recipe for a headache.
-    Key-based authentication is strongly recommended. If the remote servers are not using key-based auth and each server prompts for a password, well… deal with it. Alternatively, it's a great opportunity to set up key-based authentication for a more secure and hassle-free experience.
+## 📝 Requirements
+- All remote servers must have the same credentials (same username and authentication method) — because trying to manage different users for each server is a recipe for a headache.
+- Key-based authentication is strongly recommended. If the remote servers are not using key-based auth and each server prompts for a password, well… deal with it. Alternatively, it's a great opportunity to set up key-based authentication for a more secure and hassle-free experience.
 
-🔒 Sudo Notes
+## 🔒 Sudo Notes
 If --sudo yes is passed, the script will:
-    Prompt for your password once.
-    Test sudo access on the first server.
-    Reuse the password across servers using sudo -S.
-    ⚠️ Ensure sudo is installed and allowed for the user on the remote servers.
+- Prompt for your password once.
+- Test sudo access on the first server.
+- Reuse the password across servers using sudo -S.
+⚠️ Ensure sudo is installed and allowed for the user on the remote servers.
 
-📂 Output Files
+## 📂 Output Files
 When saving is enabled, output for each server will be stored in a uniquely named directory (default: current timestamp), with one file per server.
 
-🐚 Why "Poor Man’s Ansible"? AKA Why I Wrote This Script
+## 🐚 Why "Poor Man’s Ansible"? AKA Why I Wrote This Script
 Sometimes you just want to run a few commands on a bunch of servers. But sometimes… compliance says nope.
 
 I found myself in an environment where:
@@ -70,11 +69,11 @@ So I wrote this:
 
 No fancy YAML, no agents to manage, just plain old Bash doing what it does best: brute-forcing sanity.
 
-📜 License
+## 📜 License
 MIT — use freely, modify as you wish.
 
-🙏 Contributions
+## 🙏 Contributions
 PRs and ideas welcome! Especially for:
-    Output formatting
-    Parallel execution
-    Better sudo handling
+- Output formatting
+- Parallel execution
+- Better sudo handling
