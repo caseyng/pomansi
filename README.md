@@ -67,6 +67,10 @@ So I wrote this bash script that:
 
 No fancy YAML, no agents to manage, just plain old Bash doing what it does best: brute-forcing sanity.
 
+## 💡 Design Considerations
+1. I deliberately didn't use getopt because it is not guaranteed to be available on all Linux. 
+2. And getopt does not take long options.
+
 ## 📜 License
 MIT — use freely, modify as you wish.
 
