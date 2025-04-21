@@ -7,6 +7,7 @@ usage() {
   echo "  -s, --servers               List of servers (space-separated)"
   echo "  -c, --commands              List of commands (quoted)"
   echo -e "\nOptions:"
+  echo "      --concurrency N         Max number of servers to run in parallel (default: 1 for serial)"
   echo "      --output-dir DIR        Directory for outputs (default: %Y%m%d_%H%M%S)"
   echo "      --save [yes|no]         Whether to save output (default: yes)"
   echo "                              Accepts: yes|y|1|true, no|n|0|false"
@@ -46,6 +47,25 @@ parse_flag() {
   return 1  # signal: consumed value, needs shift
 }
 
+run_ssh() {
+  local s="$1"
+  echo "=== Connecting $s ==="
+  ssh $ssh_opts $user@$s <<EOF | { [[ "$save" == "yes" ]] && tee "$dir/$s" || cat; }
+    [[ $sudo == "yes" ]] && echo "$SUDO_PASS" | sudo -S whoami &>/dev/null
+    for cmd in ${serialized_commands[@]}; do
+      c="\$(echo \$cmd | base64 -d)"
+      echo "--- BEGIN \$c ---"
+      if [[ $sudo == "yes" ]]; then
+        echo "$SUDO_PASS" | sudo -S bash -c "\$c"
+      else
+        bash -c "\$c"
+      fi
+      echo "--- END \$c ---"
+    done
+  echo "=== Disconnecting $s ==="
+EOF
+}
+
 user=""
 servers=()
 commands=()
@@ -53,6 +73,7 @@ ssh_opts=""
 save="yes"
 sudo="no"
 dir="$(date +%Y%m%d_%H%M%S)"
+concurrency=1
 verbose="off"
 mode=""
 
@@ -86,6 +107,14 @@ while [[ $# -gt 0 ]]; do
     --output-dir)
       shift
       dir="$1"
+      ;;
+    --concurrency)
+      shift
+      concurrency="$1"
+      if ! [[ "$concurrency" =~ ^[0-9]+$ ]]; then
+        echo "Invalid value for --concurrency: must be a non-negative number"
+        usage
+      fi
       ;;
     --verbose)
       verbose="on"
@@ -156,20 +185,20 @@ if [[ $sudo == "yes" ]]; then
   done
 fi
 
+pids=()
 for s in "${servers[@]}"; do
-  echo "=== Connecting $s ==="
-  ssh $ssh_opts $user@$s <<EOF | { [[ "$save" == "yes" ]] && tee "$dir/$s" || cat; }
-    [[ $sudo == "yes" ]] && echo "$SUDO_PASS" | sudo -S whoami &>/dev/null
-    for cmd in ${serialized_commands[@]}; do
-      c="\$(echo \$cmd | base64 -d)"
-      echo "--- BEGIN \$c ---"
-      if [[ $sudo == "yes" ]]; then
-        echo "$SUDO_PASS" | sudo -S bash -c "\$c"
-      else
-        bash -c "\$c"
-      fi
-      echo "--- END \$c ---"
-    done
-  echo "=== Disconnecting $s ==="
-EOF
+  run_ssh "$s" &
+  pids+=($!)
+
+  # Wait if we hit the concurrency limit
+  while [[ "$concurrency" -gt 0 && ${#pids[@]} -ge "$concurrency" ]]; do
+    pid="${pids[0]}"
+    [[ -n "$pid" ]] && wait "$pid"
+    pids=("${pids[@]:1}")  # remove the finished pid
+  done
+done
+
+# Wait for any remaining jobs
+for pid in "${pids[@]}"; do
+  [[ -n "$pid" ]] && wait "$pid"
 done
