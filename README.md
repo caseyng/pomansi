@@ -5,6 +5,7 @@
 - Execute multiple commands on multiple servers
 - Optional `sudo` support with password prompt
 - Save outputs to directory
+- Concurrent mode
 - Verbose mode for input verification
 - Minimal dependencies (just Bash and SSH)
 
@@ -17,6 +18,7 @@ Required
     -c, --commands — List of commands (quoted if spaced)
 
 Optional
+    --concurrency N - Max number of servers to run in parallel (default: 1 for serial, 0 for no limits)
     --output-dir DIR — Output folder name (default: timestamped)
     --save [yes|no] — Save output to files (default: yes)
     --ssh-opts OPTS — Extra SSH options (quoted)
