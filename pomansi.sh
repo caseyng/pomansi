@@ -7,7 +7,7 @@ usage() {
   echo "  -s, --servers               List of servers (space-separated)"
   echo "  -c, --commands              List of commands (quoted)"
   echo -e "\nOptions:"
-  echo "      --concurrency N         Max number of servers to run in parallel (default: 1 for serial)"
+  echo "      --concurrency N         Max number of servers to run in parallel (default: 1 for serial, 0 for unlimited concurrency)"
   echo "      --output-dir DIR        Directory for outputs (default: %Y%m%d_%H%M%S)"
   echo "      --save [yes|no]         Whether to save output (default: yes)"
   echo "                              Accepts: yes|y|1|true, no|n|0|false"
