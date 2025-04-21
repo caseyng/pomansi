@@ -1,4 +1,4 @@
-# pomansi — **PO**or **M**an’s **ANSI**ble
+# pomansi — *PO*or *M*an’s *ANSI*ble
 `pomansi.sh` is a lightweight Bash utility for running one or more commands across multiple servers over SSH, with optional `sudo`, output saving, and custom SSH options. It’s ideal for quick diagnostics or bulk administrative tasks—no Ansible or Python required.
 
 ## 🚀 Features
