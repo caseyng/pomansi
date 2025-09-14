@@ -1,24 +1,29 @@
 #!/bin/bash
 
 usage() {
-  echo -e "\nUsage: $0 [options]"
-  echo -e "\nRequired: "
-  echo "  -u, --user                  Remote SSH username"
-  echo "  -s, --servers               List of servers (space-separated)"
-  echo "  -c, --commands              List of commands (quoted)"
-  echo -e "\nOptions:"
-  echo "      --concurrency N         Max number of servers to run in parallel (default: 1 for serial, 0 for unlimited concurrency)"
-  echo "      --output-dir DIR        Directory for outputs (default: %Y%m%d_%H%M%S)"
-  echo "      --save [yes|no]         Whether to save output (default: yes)"
-  echo "                              Accepts: yes|y|1|true, no|n|0|false"
-  echo "      --ssh-opts              ssh-opts to be passed to the remote server"
-  echo "                              Needs to be quoted. e.g. -i <identity file> -p <port>"
-  echo "      --sudo [yes|no]         Whether to use sudo (default: no)"
-  echo "                              Accepts: yes|y|1|true, no|n|0|false"
-  echo "                              No if sudo does not exist on the remote servers"
-  echo "  -v, --verbose               Print options to stdout (default: off)"
-  echo "  -h, --help                  Show this help and exit"
-  echo -e "\nExample:\n  $0 -u alice -s hive.home 192.168.0.1 -c 'whoami' 'uptime' 'df -h' 'ls | wc -l' --ssh-opts '-i ~/.ssh/id_rsa -p 2022' --save yes\n"
+cat <<USAGE
+Usage: $0 [options]
+Required:
+  -u, --user             Remote SSH username
+  -s, --servers          List of servers (space-separated)
+  -c, --commands         List of commands (quoted)
+
+Options:
+      --concurrency N    Max number of servers to run in parallel (default: 1 for serial, 0 for unlimited concurrency)
+      --output-dir DIR   Directory for outputs (default: %Y%m%d_%H%M%S)
+      --save [yes|no]    Whether to save output (default: yes)
+                         Accepts: yes|y|1|true, no|n|0|false
+      --ssh-opts         ssh-opts to be passed to the remote server
+                         Needs to be quoted. e.g. -i <identity file> -p <port>
+      --sudo [yes|no]    Whether to use sudo (default: no)
+                         Accepts: yes|y|1|true, no|n|0|false
+                         No if sudo does not exist on the remote servers
+  -v, --verbose          Print options to stdout (default: off)
+  -h, --help             Show this help and exit
+
+Example:
+  $0 -u alice -s hive.home 192.168.0.1 -c 'whoami' 'uptime' 'df -h' 'ls | wc -l' --ssh-opts '-i ~/.ssh/id_rsa -p 2022' --save yes
+USAGE
   exit 1
 }
 
